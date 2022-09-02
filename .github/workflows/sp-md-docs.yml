@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+env:
+  appId: ${{ secrets.appId }}
+  tenantId: ${{ secrets.tenantId }}
+  siteUrl: ${{ secrets.siteUrl }}
+  CERTIFICATE_BASE64: ${{ secrets.CERTIFICATEBASE64 }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install M365 CLI
+        run: npm i -g @pnp/cli-microsoft365
+      - name: Run a multi-line script
+        run: |
+          pwsh -f ${GITHUB_WORKSPACE}/scripts/upload.ps1
